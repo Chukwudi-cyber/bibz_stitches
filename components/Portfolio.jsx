@@ -130,9 +130,19 @@ export default function Portfolio() {
   const [openId, setOpenId] = useState(null); // which group is open
   const [viewer, setViewer] = useState(null); // index of the enlarged piece
   const [hoverId, setHoverId] = useState(null); // which card is being hovered
+  const [canHover, setCanHover] = useState(false); // true only on laptops with a mouse
 
   const group = COLLECTIONS.find((c) => c.id === openId);
   const items = group ? group.items : [];
+
+  // Phones (even in desktop mode) have no mouse, so the text always shows there
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setCanHover(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const scrollToTop = () =>
     document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" });
@@ -186,7 +196,8 @@ export default function Portfolio() {
 
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {COLLECTIONS.map((c, i) => {
-                const active = hoverId === c.id;
+                // text always shows on touch screens; on laptops only when hovered
+                const active = !canHover || hoverId === c.id;
                 return (
                   <Reveal key={c.id} delay={(i % 4) * 120}>
                     <button
@@ -205,16 +216,16 @@ export default function Portfolio() {
                         className="object-cover object-top transition duration-500 group-hover:scale-105"
                       />
 
-                      {/* dark fade: only on the hovered card (always on phones) */}
+                      {/* dark fade */}
                       <div
-                        className={`absolute inset-0 bg-gradient-to-t from-[#2B1033]/90 via-[#2B1033]/30 to-transparent transition-opacity duration-300 max-md:opacity-100 ${
+                        className={`absolute inset-0 bg-gradient-to-t from-[#2B1033]/90 via-[#2B1033]/30 to-transparent transition-opacity duration-300 ${
                           active ? "opacity-100" : "opacity-0"
                         }`}
                       />
 
-                      {/* text: only on the hovered card (always on phones) */}
+                      {/* text */}
                       <div
-                        className={`absolute inset-x-0 bottom-0 p-4 text-white transition-all duration-300 max-md:translate-y-0 max-md:opacity-100 ${
+                        className={`absolute inset-x-0 bottom-0 p-4 text-white transition-all duration-300 ${
                           active
                             ? "translate-y-0 opacity-100"
                             : "translate-y-3 opacity-0"
