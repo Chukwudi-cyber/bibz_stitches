@@ -6,7 +6,7 @@ import { ArrowRight, Play, X } from "lucide-react";
 import Marquee from "@/components/Marquee";
 
 const VIDEO = "/videos/hero.mp4";
-const PHOTO = "/images/pic4.jpeg"; // change to your file name
+const PHOTO = "/images/heropic.jpeg"; // change to your file name
 
 // Long, gentle fade so the photo dissolves into the purple with no visible line
 const FADE =
@@ -42,7 +42,7 @@ export default function Home() {
           {/* Photo on the right, fading smoothly into the purple */}
           <div
             style={{ "--fade": FADE }}
-            className="absolute inset-0 md:inset-auto md:-top-[22%] md:-right-[5%] md:h-[122%] md:w-[66%] md:[-webkit-mask-image:var(--fade)] md:[mask-image:var(--fade)]"
+            className="absolute inset-0 md:inset-auto md:-top-[84%] md:-right-[5%] md:h-[184%] md:w-[66%] md:[-webkit-mask-image:var(--fade)] md:[mask-image:var(--fade)]"
           >
             <Image
               src={PHOTO}
